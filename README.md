@@ -1,6 +1,18 @@
 # Nasa Background
 A CLI tool to query the Nasa Open APOD (Astronomy Picture of the Day) to get, the current, picture of the day. 
 
+Requirements:
+- Linux:
+  - Gnome desktop environment
+- Windows:
+  - Have powershell installed to be able to set registry values
+- API:
+  - You in the example config file is the demo api key that you can use, but it
+    suggested to go get your own api key from [Nasa](https://api.nasa.gov/)
+
+Install:
+Download or clone the repo and then build main.go using go. Then setup the config.json file to have your api key (optional) and then the path on your desktop to where you would like to save the pictures to. 
+
 Plans to: 
 - Handle video files when found
 - Add command line arugements
