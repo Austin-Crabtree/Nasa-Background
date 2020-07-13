@@ -17,10 +17,10 @@ Plans to:
 - Handle video files when found
 - Add command line arugements
     - -s only save don't change background
-    - -l change location to save to from default
     - -o only output the response json
     - -d give a date to query and get that days picture (will change background)
     - -dr date range to query and save that range of pictures (will not change background)
+    - -f force re-download the picture
 - Check for operating system, then desktop operating system to allow for this to be used on Windows, Mac and Linux (Gnome, KDE, XFCE, etc)
 
 Notes on features:
