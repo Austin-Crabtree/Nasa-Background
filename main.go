@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"./model"
+	"nasa-background/model"
 )
 
 // TODO make better error handling
