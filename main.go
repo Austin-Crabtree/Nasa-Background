@@ -79,6 +79,9 @@ func main() {
 	err = json.Unmarshal(body, &nasa)
 	checkErr(err)
 
+	if nasa.MediaType != "image" {
+		return
+	}
 	// TODO Check media type of the response to know how to proceed
 	// possible types: video, image
 	// images are jpg
