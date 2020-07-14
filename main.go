@@ -28,13 +28,21 @@ func main() {
 	// Setup the commandline args
 	save := flag.Bool("s", false, "Only save the picture and don't change background.")
 	print := flag.Bool("o", false, "Only output the response json")
-	//dateChange := flag.String("d", "", "Give date to query and get that days picture, while changing background.")
+	dateChange := flag.String("d", "", "Give date to query and get that days picture, while changing background.")
 	//dateQuery := flag.String("dr", "", "Give a date range to query and save those days pictures. Will not change background")
 	flag.Parse()
 
 	// Setup request values
 	url := "https://api.nasa.gov/planetary/apod"
-	date := time.Now().Format("2006-01-02")
+
+	var date string
+	if *dateChange == "" {
+		date = time.Now().Format("2006-01-02")
+	} else {
+		dateTime, err := time.Parse("2006-01-02", *dateChange)
+		checkErr(err)
+		date = dateTime.Format("2006-01-02")
+	}
 
 	// Read in the config data
 	configPath := filepath.Join(".", "config.json") // Change to this being fallback if a path isn't given
@@ -91,8 +99,17 @@ func main() {
 		body, err = ioutil.ReadAll(resp.Body)
 		checkErr(err)
 
-		err = ioutil.WriteFile(imgPath, body, 755)
-		checkErr(err)
+		if runtime.GOOS == "linux" {
+			f, err := os.OpenFile(imgPath, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0755)
+			checkErr(err)
+			defer f.Close()
+
+			_, err = f.Write(body)
+			checkErr(err)
+		} else if runtime.GOOS == "windows" {
+			err = ioutil.WriteFile(imgPath, body, 755)
+			checkErr(err)
+		}
 
 		if *save {
 			return
