@@ -41,8 +41,8 @@ func main() {
 		date = time.Now().Format("2006-01-02")
 	} else {
 		dateTime, err := time.Parse("2006-01-02", *dateChange)
-		date = dateTime.Format("2006-01-02")
 		checkErr(err)
+		date = dateTime.Format("2006-01-02")
 	}
 
 	// Read in the config data
@@ -80,6 +80,9 @@ func main() {
 	err = json.Unmarshal(body, &nasa)
 	checkErr(err)
 
+	if nasa.MediaType != "image" {
+		return
+	}
 	// TODO Check media type of the response to know how to proceed
 	// possible types: video, image
 	// images are jpg
@@ -101,8 +104,17 @@ func main() {
 		body, err = ioutil.ReadAll(resp.Body)
 		checkErr(err)
 
-		err = ioutil.WriteFile(imgPath, body, 755)
-		checkErr(err)
+		if runtime.GOOS == "linux" {
+			f, err := os.OpenFile(imgPath, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0755)
+			checkErr(err)
+			defer f.Close()
+
+			_, err = f.Write(body)
+			checkErr(err)
+		} else if runtime.GOOS == "windows" {
+			err = ioutil.WriteFile(imgPath, body, 755)
+			checkErr(err)
+		}
 
 		if *save {
 			return
