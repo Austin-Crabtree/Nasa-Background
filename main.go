@@ -27,14 +27,23 @@ func checkErr(err error) {
 func main() {
 	// Setup the commandline args
 	save := flag.Bool("s", false, "Only save the picture and don't change background.")
-	print := flag.Bool("o", false, "Only output the response json")
-	//dateChange := flag.String("d", "", "Give date to query and get that days picture, while changing background.")
+	print := flag.Bool("o", false, "Only output the response json.")
+	force := flag.Bool("f", false, "Force redownload the image.")
+	dateChange := flag.String("d", "", "Give date to query and get that days picture, while changing background.")
 	//dateQuery := flag.String("dr", "", "Give a date range to query and save those days pictures. Will not change background")
 	flag.Parse()
 
 	// Setup request values
 	url := "https://api.nasa.gov/planetary/apod"
-	date := time.Now().Format("2006-01-02")
+
+	var date string
+	if *dateChange == "" {
+		date = time.Now().Format("2006-01-02")
+	} else {
+		dateTime, err := time.Parse("2006-01-02", *dateChange)
+		date = dateTime.Format("2006-01-02")
+		checkErr(err)
+	}
 
 	// Read in the config data
 	configPath := filepath.Join(".", "config.json") // Change to this being fallback if a path isn't given
@@ -80,7 +89,8 @@ func main() {
 	imgPath := filepath.Join(config.SavePath, imgName)
 
 	// If the file exists then skip this part
-	if _, err = os.Stat(imgPath); os.IsNotExist(err) { // Add a -f flage to force re-download
+	_, err = os.Stat(imgPath)
+	if os.IsNotExist(err) || !*force { // Add a -f flage to force re-download
 		if nasa.Hdurl != "" {
 			resp, err = http.Get(nasa.Hdurl)
 		} else {
@@ -105,10 +115,10 @@ func main() {
 			err = cmd.Run()
 			checkErr(err)
 		} else if runtime.GOOS == "windows" {
-			cmd := exec.Command("powershell.exe", "Set-ItemProperty", "-path", "'HKCU:\\Control Panel\\Desktop\\'", "-name", "wallpaper", "-value", imgPath)
+			cmd := exec.Command("powershell", "Set-ItemProperty", "-path", "'HKCU:\\Control Panel\\Desktop\\'", "-name", "wallpaper", "-value", imgPath)
 			err = cmd.Run()
 			checkErr(err)
-			cmd = exec.Command("RUNDLL32.EXE", "user32.dll,UpdatePerUserSystemParameters")
+			cmd = exec.Command("RUNDLL32.EXE", "user32.dll, UpdatePerUserSystemParameters")
 			err = cmd.Run()
 			checkErr(err)
 		}
