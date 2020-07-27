@@ -1,4 +1,8 @@
 # Nasa Background
+
+![License](https://img.shields.io/github/license/Austin-Crabtree/Nasa-Background)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Austin-Crabtree/Nasa-Background)](https://goreportcard.com/report/github.com/Austin-Crabtree/Nasa-Background)
+
 A CLI tool to query the Nasa Open APOD (Astronomy Picture of the Day) to get, the current, picture of the day. 
 
 Requirements:
