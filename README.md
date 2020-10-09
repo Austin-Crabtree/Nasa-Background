@@ -5,7 +5,7 @@ Requirements:
 - Linux:
   - Gnome desktop environment
 - Windows:
-  - Have powershell installed to be able to set registry values
+  - Have powershell installed to be able to set registry values ( This is not very easy to get right )
 - API:
   - You in the example config file is the demo api key that you can use, but it
     suggested to go get your own api key from [Nasa](https://api.nasa.gov/)
