@@ -16,7 +16,7 @@ Download or clone the repo and then build main.go using go. Then setup the confi
 Plans to: 
 - Handle video files when found
 - Add command line arugements
-    - -s only save don't change background (Do I need to do this?)
+    - -s only save don't change background
     - -o only output the response json
     - -d give a date to query and get that days picture (will change background)
     - -dr date range to query and save that range of pictures (will not change background)
